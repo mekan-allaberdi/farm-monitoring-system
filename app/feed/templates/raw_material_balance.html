@@ -1,0 +1,52 @@
+{% extends "main.html" %}
+{% block body %}
+  <ul class=raw_materials >
+   
+  	<h2 class="text-center" id="title">Çig mal galyndy</h2>
+
+  {% if raw_materials|length > 0 %}
+  	<div class="container top_space40" style="min-width: 400px; width:50%;"> 
+	   <table class="table table-striped table-font-size">
+	    <thead>
+		<tr>
+			<th>#</th>
+		    <th>Ady</th>
+		    <th>Mukdary(KG)</th>
+		    <th>1 towugyň iýýan mukdary (KG)</th>
+		    <th>Çig mal ýetyän towuk sany</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		{% for raw_material in raw_materials %}
+			<tr>
+				{% set weight = amount_per_hen[raw_material.name]%}
+				<td style="width:10%">
+					{{ loop.index }}
+				</td>
+			    <td style="width:20%">
+			    	{{ raw_material.name }}
+			    </td>
+			    <td style="width:20%">
+			    	{{  "{:,.2f}".format(raw_material.amount) }}
+			    </td>
+			    <td style="width:25%">
+			    	{{  "{:,.4f}".format(weight) }}
+			    </td>
+			    <td style="width:25%">
+			    {% if weight > 0 %}
+			    	{{  "{:,.1f}".format((raw_material.amount/weight) |round|int) }}
+			    {% else %}
+			     	0.0
+			    {% endif%}
+			    </td>
+			</tr>
+  	    {% endfor %}
+	    </tbody>
+	</table>
+
+	</div>
+  </ul>
+
+  {% endif %}
+
+{% endblock %}

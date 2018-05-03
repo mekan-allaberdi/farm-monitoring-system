@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block body %}
+
+  {% if formula_raw_materials|length > 0 %}
+  <ul class=formula>
+  	<div class="container">
+  	
+	  	<div class="container_center">
+	  		 <h2>{{ formula.name }}</h2>
+	  	</div>
+	  	
+  	   	<div class="centered-form center-block top_space20">
+	        <div class="container col-md-10 col-md-offset-3">
+		        <div class="col-sm-4 centered_input">
+		        	<div class="panel panel-success">
+		            <div class="panel-heading">
+		              <h3 class="panel-title">Agramy(KG)</h3>
+		            </div>
+		            <div class="panel-body">
+		              <p id="weight">{{ formula.weight }}</p>
+		            </div>
+		          </div>
+		        </div>
+
+		        <div class="col-sm-4 centered_input">
+		        	<div class="panel panel-primary">
+			            <div class="panel-heading">
+			              <h3 class="panel-title">Bahasy(TM)</h3>
+			            </div>
+			            <div class="panel-body">
+			              <p id="price">{{ formula.price }}</p>
+			            </div>
+		          	</div>
+	        	</div>  
+
+	        </div>
+    	</div>
+
+    	<div class="col-xs-12" style="height:50px;"></div>
+
+       	<table class="table table-striped table-font-size">
+		    <thead>
+			<tr>
+				<th>#</th>
+			    <th>Ady</th>
+			    <th>Mukdary(KG|LT)</th>
+			    <th>Bahasy(TM)</th>
+			    <th>%</th>
+			</tr>
+		    </thead>
+	    
+		    <tbody>
+			{% for formula_raw_material in formula_raw_materials %}
+				<tr>
+					<td>{{ loop.index }}</td>
+				    <td>{{ formula_raw_material.rm_name }}</td>
+				    <td>{{ "{:,.2f}".format(formula_raw_material.weight) }}</td>
+				    <td>{{ "{:,.4f}".format(formula_raw_material.price) }}</p></td>
+				    <td>{{ formula_raw_material.percentage }}</td>
+				</tr>
+	  	    {% endfor %}
+		    </tbody>
+		</table>
+	</div>
+  </ul>
+
+  {% endif %}
+{% endblock %}

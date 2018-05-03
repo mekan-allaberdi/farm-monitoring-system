@@ -1,0 +1,89 @@
+{% extends "main.html" %}
+
+{% block body %}
+    
+  {% if raw_material_logs|length > 0 %}
+  <ul class=logs>
+      <div class="container_center top_space20">
+         <h1>Ammara gelen çig mallar</h1>
+      </div>
+	
+  <div class="container top_space40" style="min-width: 400px;" > 
+        <table id="log_table" class="table table-striped table-font-size" width="100%" >
+  	    <thead>
+      		<tr>
+      		    <th>Ady</th>
+              <th>Mukdary(KG|LT)</th>
+              <th>Bahasy(TM)</th>
+      		    <th>Umumy bahasy(TM)</th>
+      		    <th>Senesi</th>
+              {% if session['role'] != 'barlagçy' %}
+                <th></th>
+              {% endif%}
+          </tr>
+      	   </thead>
+            <tbody id="pagedTable">
+          		{% for raw_material_log in raw_material_logs %}
+          			<tr>
+          			    <td>{{ raw_material_log.name }}</td>
+                    <td>{{ "{:,.2f}".format(raw_material_log.amount) }}</td>
+                    <td>{{ "{:,.4f}".format(raw_material_log.price) }}</td>
+          			    <td>{{ "{:,.2f}".format(raw_material_log.price * raw_material_log.amount) }}</td>
+          			    <td>{{ "{:%d-%m-%Y}".format(raw_material_log.date) }}</td>
+                    {% if session['role'] != 'barlagçy' %}
+                      <td>
+                        <div class="">
+                          <button 
+                            class="btn btn-warning" data-toggle="modal" data-target="#{{raw_material_log.id}}" contenteditable="false">
+                            Üýtget
+                          </button>
+                        </div>
+                        <div class="modal fade" id={{raw_material_log.id}} tabindex="0" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-sm">
+                              <form role="form" name="modalForm" action="{{ url_for('feed.edit_raw_material_log', id = raw_material_log.id ) }}" method="post">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true" class="">×</span> </button>
+                                      <h4>{{raw_material_log.name}}</h4>
+                                    </div>
+                                      <div class="modal-body">
+                                        <div class="input-group top_space40">
+                                          <span class="input-group-addon">Agramy(KG)</span>
+                                          <input class="form-control number" name="amount" min="1" step="0.01" required autofocus 
+                                          value="{{raw_material_log.amount}}">
+                                        </div>
+                                        <div class="input-group space">
+                                          <span class="input-group-addon">Bahasy(TM)</span>
+                                          <input class="form-control number" name="price" min="1" required step="0.00001" 
+                                          autofocus value="{{raw_material_log.price}}">
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer top_space20">            
+                                          <input type="submit"  class="btn btn-success" value="Üýtget">
+                                          <button type="button" class="btn btn-default" data-dismiss="modal">Ýap</button>
+                                      </div>
+                                  </div>
+                              </form>
+                            </div>
+                        </div>
+                      </td>
+                    {% endif%}
+          			</tr>
+        	    {% endfor %}
+            </tbody>
+      </table>
+  </div>
+  </ul>
+
+<script type="text/javascript">
+
+$(function(){
+  $(document).ready(function() {
+    $('#log_table').DataTable();
+  });
+});
+
+</script>
+
+  {% endif %}
+{% endblock %}

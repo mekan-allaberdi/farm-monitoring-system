@@ -1,0 +1,53 @@
+{% extends "main.html" %}
+{% block body %}
+    <div class="container well text-center" style="margin: auto; background: #b0bec5; width: 25%; min-width: 350px">
+		<form action="{{ url_for('cash.salary', employee_name = employee.name) }}" method=post>
+			<h2><strong>{{ employee.name }}</strong></h2>
+			<h3> Balans : {{ employee.balance}} </h3>
+			<hr>
+			<h3> Aýlyk </h3>
+			<input type="text" class="form-control input-lg space" required placeholder="Aý" name=title>   
+			<input type="number" min="1"  class="form-control  input-lg space" required placeholder="Mukdary" name=amount>
+			<input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Töle">
+		</form>
+	</div>
+
+	<div class="col-sm-12" style="height:50px;"></div>
+
+
+	{% if salaries|length > 0 %}
+	<ul class=sellers>
+		<div class="container"> 
+	   		<table id="salary" class="table table-striped table-font-size">
+	    	<thead>
+				<tr>
+				    <th>Aý</th>
+				    <th>Mukdary(TM)</th>
+				    <th>Senesi</th>
+				</tr>
+		    </thead>
+		    <tbody>
+			{% for salary in salaries %}
+				<tr>
+				    <td>{{ salary.title }}</td>
+				    <td>{{ "{:,.2f}".format(salary.amount) }}</td>
+                    <td>  {{ "{:%d-%m-%Y}".format(salary.date) }} </td>
+				</tr>
+		    {% endfor %}
+	    	</tbody>
+			</table>
+		</div>
+	</ul>
+  {% endif %}
+
+<script type="text/javascript">
+
+  $(function(){
+    $(document).ready(function() {
+      $('#salary').DataTable();
+    });
+  });
+
+</script>
+
+{% endblock %}

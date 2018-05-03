@@ -1,0 +1,47 @@
+{% extends "main.html" %}
+{% block body %}
+    <div class="container well text-center" style="margin: auto; background: #b0bec5; width: 25%; min-width: 350px">
+		<form action="{{ url_for('cash.new_employee') }}" method=post>
+			<h2><strong> Täze işgär </strong></h2>
+			<input type="text" class="form-control input-lg space" required placeholder="Ady" name=name>   
+			<input type="text"  class="form-control  input-lg space" required placeholder="Wezipesi" name=role>
+			<input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Goş">
+		</form>
+	</div>
+
+	<div class="col-sm-12" style="height:50px;"></div>
+
+
+	{% if employees|length > 0 %}
+	<ul class=sellers>
+		<div class="container"> 
+	   		<table class="table table-striped table-font-size">
+	    	<thead>
+				<tr>
+					<th>#</th>
+				    <th>Ady</th>
+				    <th>Wezipesi</th>
+				    <th>Balans(TM)</th>
+				    <th>Işe başlan senesi</th>
+				</tr>
+		    </thead>
+		    <tbody>
+			{% for employee in employees %}
+				<tr>
+					<td>{{ loop.index }}</td>
+				    <td>
+				     	<a href="{{ url_for('cash.employee_info', employee_name = employee.name)}}" 
+		              	type="text/html"> <strong> {{ employee.name }} </strong></a>
+				    </td>
+				    <td>{{ employee.role }}</td>
+				    <td>{{ "{:,.2f}".format(employee.balance) }}</td>
+                    <td>  {{ "{:%d-%m-%Y}".format(employee.start_date) }} </td>
+				</tr>
+		    {% endfor %}
+	    	</tbody>
+			</table>
+		</div>
+	</ul>
+  {% endif %}
+
+{% endblock %}

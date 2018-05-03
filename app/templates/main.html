@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Anew Yumurtga</title>
+   <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Anew Yumurtga Accounting System">
+    <meta name="author" content="Anew Yumurtga">
+
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}"/>
+    
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/navbar-fixed-top.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/daterangepicker.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/jquery.dataTables.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/bootstrap-datetimepicker.css') }}" rel="stylesheet" />
+    
+</head>
+<body>
+
+<script src="{{ url_for('static', filename='js/jquery-1.12.4.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-table.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script src="{{ url_for('static', filename='js/moment.js') }}"></script>
+<script src="{{ url_for('static', filename='js/daterangepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap-datetimepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery.canvasjs.min.js') }}"></script>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top bg-inverse">
+   <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{{ url_for('feed.raw_materials') }}">Änew Ýumurtga</a>
+      </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="###"> Iým <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+              <li><a href="{{ url_for('feed.raw_materials') }}">Çig mal ammary</a></li>
+              <li><a href="{{ url_for('feed.raw_material_logs') }}" >Çig mal log</a></li>
+              <li><a href="{{ url_for('feed.raw_material_balance') }}" >Çig mal galyndy</a></li>
+            <li class="divider"></li>
+              <li><a href="{{ url_for('feed.new_formula') }}" >Täze formula</a></li>
+              <li><a href="{{ url_for('feed.formulas') }}" >Formulalar</a></li>
+              <li><a href="{{ url_for('feed.hen_feed_ratios') }}" >Towuk başyna iým</a></li>
+            <li class="divider"></li>
+              <li><a href="{{ url_for('feed.feeds') }}">Iým ammary</a></li>
+              <li><a href="{{ url_for('feed.ready_feeds') }}">Taýýar iým</a></li>
+              <li><a href="#">Ulanylan iým</a></li>
+          </ul>
+        </li>
+
+        <li><a href="{{ url_for('hencoop.hencoops') }}">Korpus</a></li>
+
+
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"> Ýumurtga <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="{{ url_for('egg.egg_store') }}">Ammar</a></li>
+            <li><a href="{{ url_for('egg.egg_sale') }}">Satuw</a></li>
+          </ul>
+        </li>
+
+        <li><a href="{{ url_for('egg.customers') }}">Müşderi</a></li>
+
+        <li><a href="{{ url_for('cash.employee') }}">Işgär</a></li>
+
+        <li><a href="{{ url_for('cash.cash') }}">Kassa</a></li>
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> {{session['username']}} <span class="caret"></span></a>
+           <ul class="dropdown-menu">
+            <li><a href="#">Parol üýtget</a></li>
+            <li><a href="{{ url_for('logout') }}" method=post >Çyk</a></li>
+           </ul>
+        </li>
+      </ul>
+    </div>
+    </div>
+  </nav>
+<script type="text/javascript">
+  $(function() {
+        $.fn.datetimepicker.dates['en'] = {
+        days: ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+        daysShort: ["Вск", "Пнд", "Втр", "Срд", "Чтв", "Птн", "Суб", "Вск"],
+        daysMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+        months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+        monthsShort: ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+        today: "Сегодня",
+        suffix: [],
+        meridiem: []
+      };
+  });
+</script>
+
+  {% block body %}{% endblock %}
+
+<ul>
+
+
+  <div class="container" style="margin-top: 40px">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong> {{ message }}</strong> 
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  
+  </div>
+</ul>
+
+
+
+
+</body>
+</html>

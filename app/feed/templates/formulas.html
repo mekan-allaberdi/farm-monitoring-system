@@ -1,0 +1,62 @@
+{% extends "main.html" %}
+{% block body %}
+    
+  {% if formulas|length > 0 %}
+  <ul class=formulas>
+     <div class="container_center top_space20">
+         <h1>Formulalar</h1>
+      </div>
+  	
+  	<div class="container top_space40" > 
+	   <table id="formulas" class="table table-striped table-font-size">
+	    <thead>
+    		<tr>
+    	    <th>Ady</th>
+          <th>Agramy(KG|LT)</th>
+    	    <th>Bahasy(TM)</th>
+          {% if session['role'] != 'barlagçy' %}
+            <th></th>
+          {% endif%}
+    		</tr>
+	    </thead>
+	    <tbody>
+		    {% for formula in formulas %}
+			   <tr>
+            <td>
+              <a href="{{ url_for('feed.formula' , name = formula.name) }}" 
+                type="button" class="btn btn-primary">{{ formula.name }}</a>
+            </td>
+            <td>{{ "{:,.2f}".format(formula.weight) }}</td>
+            <td>{{ "{:,.2f}".format(formula.price) }}</td>
+            {% if session['role'] != 'barlagçy' %}
+              <td>
+                <a data-toggle="modal" data-target="#d{{formula.name}}" contenteditable="false"
+                  type="button" class="btn btn-danger"> <span class="glyphicon glyphicon-trash"></span> Poz
+                </a>
+                <div class="modal fade" id=d{{formula.name}} tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-sm">
+                        <form role="form" name="modalForm" action="{{ url_for('feed.delete_formula' , name = formula.name) }}" method="post">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal"> <span aria-hidden="true" class="">×</span> </button>
+                                <h4><strong>{{formula.name}}</strong> çig maly pozulsyn my?</h4>
+                              </div>
+                                <div class="modal-body top_space20">            
+                                    <input type="submit"  class="btn btn-danger" value="Hawa">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Ýok</button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                  </div>   
+              </td>
+            {% endif%}
+    			</tr>
+      	{% endfor %}
+	    </tbody>
+	</table>
+	</div>
+  </ul>
+
+  {% endif %}
+{% endblock %}

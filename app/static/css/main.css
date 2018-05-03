@@ -1,0 +1,95 @@
+.jumbotron {
+  background-color: transparent; 
+  align-content: center;
+  text-align: center;
+}
+.jumbotron {
+  padding: 1px;
+  font-size: 18px;
+}
+
+.centered-margins{
+  margin-right: 250px;
+  margin-left: 250px;
+}
+
+.space {
+  margin-top: 5px;
+}
+
+.space-right {
+  margin-right: 5px;
+}
+
+.top_space40 {
+  margin-top: 40px;
+}
+
+.top_space60 {
+  margin-top: 60px;
+}
+
+.bottom_space40 {
+  margin-bottom: 40px;
+}
+
+.top_space20 {
+  margin-top: 20px;
+}
+
+.top_space-20 {
+  margin-top: -20px;
+}
+
+.top_space10 {
+  margin-top: 10px;
+}
+
+.add-button {
+  font-size: 20px;
+  width: 240px;
+  margin-top: 5px;
+}
+
+.add-btn {
+  font-size: 18px;
+  width: 200px;
+  margin-top: 5px;
+}
+
+.self_button{
+    background-color: #90a4ae; 
+    color: #ffffff;
+}
+
+.margin-rght{
+  margin-right: 20px;
+}
+
+.table-font-size{
+  font-size: 17px;
+}
+
+.centered_input{
+  align-content: center;
+  text-align: center;
+}
+
+.container_center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #f2fcff !important;
+ }
+
+h1 {
+  color: #1C2331;
+}

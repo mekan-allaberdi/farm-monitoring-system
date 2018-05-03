@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Anew Yumurtga</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Anew Yumurtga Accounting System">
+  <meta name="author" content="Anew Yumurtga">
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}"/>
+
+  <link href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}" rel="stylesheet" />
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" />
+
+  <script src="{{ url_for('static', filename='js/jquery-1.12.4.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/table.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    
+</head>
+
+<style>
+
+.button-in {
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+img.avatar {
+    width: 40%;
+    border-radius: 10%;
+}
+
+body {
+  background: #eee !important; 
+}
+
+.wrapper {  
+  margin-top: 100px;
+  margin-bottom: 80px;
+}
+
+.space {
+  margin-top: 5px;
+}
+
+form {
+  max-width: 380px;
+  padding: 15px 35px 45px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,0.1); 
+  border-radius: 5%; 
+
+}
+
+</style>
+
+<body>
+
+  <div class="wrapper text-center">
+    <form action="{{ url_for('login') }}" method=post>
+      
+      <h2 style="margin-bottom: 30px;"><strong>Änew Ýumurtga</strong> </h2>
+
+      <input type="text" class="form-control" name="username" placeholder="Ulanyjy" required="" autofocus="" />
+      <input type="password" class="form-control space" name="password" placeholder="Şifr" required=""/>         
+      <button class="btn btn-lg btn-primary btn-block button-in" type="submit">Gir</button>   
+    </form>
+  </div>
+
+  <ul>
+    <div class="container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>{{  message }}</strong> 
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}  
+    </div>
+  </ul> 
+
+  </body>
+</html>

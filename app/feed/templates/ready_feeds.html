@@ -1,0 +1,45 @@
+{% extends "main.html" %}
+{% block body %}
+    
+  {% if ready_feeds|length > 0 %}
+<ul class=ready_feeds>
+  	<div class="container_center top_space20">
+    	<h1>Ammara gelen iýmler</h1>
+  	</div>
+  	<div class="container top_space40"> 
+	   <table id="ready_feeds" class="table table-striped table-font-size">
+			<thead>
+			<tr>
+			    <th>Formula</th>
+				<th>Mukdary(KG|LT)</th>
+				<th>Bahasy(KG|LT)</th>
+			    <th>Senesi</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for ready_feed in ready_feeds %}
+				<tr>
+				    <td> <a href="{{ url_for('feed.formula' , name = ready_feed.formula) }}" type="text/html">
+            		<strong>{{ ready_feed.formula }}</strong> </a> </td>
+				    <td>{{ "{:,.2f}".format(ready_feed.weight) }}</td>
+			  		<td>{{ "{:,.2f}".format(ready_feed.price) }}</td>
+				    <td>{{ "{:%d-%m-%Y}".format(ready_feed.date) }}</td>
+				</tr>
+			    {% endfor %}
+			</tbody>
+		</table>
+	</div>
+</ul>
+
+<script type="text/javascript">
+
+$(function(){
+  $(document).ready(function() {
+    $('#ready_feeds').DataTable();
+  });
+});
+
+</script>
+
+  {% endif %}
+{% endblock %}

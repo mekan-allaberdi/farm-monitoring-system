@@ -1,0 +1,68 @@
+{% extends "main.html" %}
+{% block body %}
+<ul class="hencoops">
+  	<div class="container centered_input" style="width:18%; min-width: 270px;">
+      	<form action="#" method=post id="newItem">
+          	<div>
+           		<h2>12.05.2017</h2>
+				<input type="number" min="0"  class="form-control space input-lg" required placeholder="Ondurulen yumurtga" name="name">	        
+				<input type="number" min="0"  class="form-control space input-lg" required placeholder="Dowulen yumurtga" name="name">	        
+				<input type="number" min="0"  class="form-control space input-lg" required placeholder="Gyrylan towuk" name="name">	        
+				<input type="number" min="0"  class="form-control space input-lg" required placeholder="Iym mukdary" name="name">	        
+              	<input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Goş"> 
+         	</div>
+      </form>
+     </div>
+
+	<div class="col-xs-12" style="height:40px;"></div>
+
+  {% if hencoops|length > 0 %}
+  	<div class="container" style="min-width: 400px; width:70%;"> 
+	   <table class="table table-striped table-font-size">
+	    <thead>
+		<tr>
+			<th>#</th>
+			<th>Senesi</th>
+		    <th>Towuk sany</th>
+		    <th>Ölen towuk sany</th>
+		    <th>Öndürülen ýumurtga</th>
+		    <th>Döwülen ýumurtga</th>
+		    <th>Çykdaýjy</th>
+		    <th>Iym mukdary</th>
+		</tr>
+	    </thead>
+	    <tbody>
+		{% for hencoop in hencoops %}
+			<tr>
+				<td>{{ loop.index }}</td>
+			    <td>{{ "{:,.0f}".format(hencoop.hen_current - hencoop.hen_died ) }}</td>
+			    <td>{{ "{:,.0f}".format(hencoop.hen_died) }}</td>
+			    <td>{{ "{:,.0f}".format(hencoop.egg_produced) }}</td>
+			    <td>{{ "{:,.0f}".format(hencoop.egg_broken) }}</td>
+			  	<td>{{ "{:,.1f}".format(hencoop.expenses) }}</td>
+			    <td>
+			    	{% if hencoop.closed == False %}
+			    		<span class="glyphicon glyphicon-ok"></span>
+			    	{% endif %}
+			    </td>
+			</tr>
+  	    {% endfor %}
+	    </tbody>
+	</table>
+	</div>
+
+  </ul>
+  {% endif %}
+
+<script type="text/javascript">
+  $(function() {
+       $('#datetimepicker').datetimepicker({
+        format: 'dd/mm/yyyy',
+        startView: 'month',
+        minView: 'month',
+        autoclose: true 
+       });
+    });    
+</script>      
+
+{% endblock %}

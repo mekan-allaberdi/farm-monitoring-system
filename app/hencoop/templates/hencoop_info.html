@@ -1,0 +1,356 @@
+{% extends "main.html" %}
+{% block body %}
+
+<script type="text/javascript">
+$(function () {
+
+  var dataPoints = [];
+  var list_size = {{ hencoop_activities | length }};
+
+  {% for c_hencoop_activity in hencoop_activities %}
+    day_no = {{ c_hencoop_activity.day_number }};
+    egg_produced = {{ c_hencoop_activity.egg_produced }};
+    dataPoints.push({ x: day_no, y: egg_produced });
+  {% endfor %}
+
+  //Better to construct options first and then pass it as a parameter
+  var options = {
+    exportEnabled: true,
+    animationEnabled: true,
+
+    data: [
+    {
+      type: "splineArea", //change it to line, area, bar, pie, etc
+      dataPoints
+    }
+    ]
+  };
+
+  $("#chartContainer1").CanvasJSChart(options);
+
+});
+</script>
+
+<style>
+        
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 960px}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+      height: 100%;
+    }
+
+    .hen_well {
+      height: 445px
+    }
+
+    .expense_well {
+      height: 455px
+    }
+
+    .feed_well {
+      height: 920px;
+      max-height: 920px;
+    }
+
+    .table-hen {
+      max-height: 192px;
+    }
+    
+    .table-egg {
+      max-height: 320px;
+    }
+
+    .table-feed {
+      max-height: 306px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+      .table { height: auto; }
+    }
+
+    .mycontent-left {
+      border-right: 1px dashed #333;
+    }
+
+    .nav-tabs > li, .nav-pills > li {
+      float:none;
+      display:inline-block;
+      *display:inline; /* ie7 fix */
+       zoom:1; /* hasLayout ie7 trigger */
+    }
+
+    .nav-tabs, .nav-pills {
+        text-align:center;
+    }
+
+  </style>
+
+
+<div class="container-fluid text-center" style="margin-top: -20px">    
+  <div class="row content">
+    <div class="col-sm-3 sidenav">
+
+      <div class="well hen_well" style="margin-top: 10px; background: #b0bec5">
+      
+        <h3>Towuk sany : <strong>{{ "{:,.0f}".format(hencoop_activity.hen_current) }}</strong></h3>
+        <hr>
+        <h4>Umumy gyrylan towuk sany : <strong>{{ "{:,.0f}".format(hencoop.hen_died) }}</strong></h4>
+        <h4>Bugun gyrylan towuk sany  : <strong>{{ "{:,.0f}".format(hencoop_activity.hen_died) }}</strong></h4>
+      
+        <form action="{{ url_for('hencoop.new_hen_died' , hencoop_id = hencoop.id) }}" method=post >
+          <div class="input-group space">
+              <input type="number" min="1" name="hen_count" class="form-control input-lg"
+              required placeholder="Gyrylan towuk sany">
+              <span class="input-group-btn">
+                <button class="btn btn-primary btn-lg" type="submit">Goş</button>
+              </span>
+          </div>
+        </form>
+
+        <div class="table-responsive table-hen text-left" style="margin-top: 20px">
+          <table class="table table-bordered statistic-table-font-size header-fixed">
+            <thead>
+              <tr>
+                  <th>Sany</th>                  
+                  <th>Senesi</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for hencoop_activity in hencoop_activities %}
+              <tr>
+                <td> {{ "{:,.0f}".format(hencoop_activity.hen_died) }} </td>
+                <td> {{ "{:%d-%m-%Y}".format(hencoop_activity.date) }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div> 
+      </div>
+
+      <div class="well expense_well" style="background: #b0bec5">
+        <div class="text-center" style="margin-right: 10px; margin-left: 10px">
+          <h3>Umumy çykdaýjy : <strong>{{ "{:,.2f}".format(hencoop.expenses) }} TM</strong></h3>
+          <form action="{{ url_for('hencoop.new_hen_expense' , hencoop_id = hencoop.id) }}" method=post>
+            <input type="text" class="form-control space input-lg" required placeholder="Sebäp" name="expense_title" id="expense_title">
+            <input type="number" class="form-control space input-lg" required placeholder="Mukdar" name="expense_amount" id="expense_amount">
+            <input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Goş">
+          </form>
+        </div>
+      
+        <div class="table-responsive table-hen text-left" style="margin-top: 20px">
+          <table class="table table-bordered statistic-table-font-size header-fixed">
+            <thead>
+              <tr>
+                <th>Sebäp</th>
+                <th>Mukdar</th>
+                <th>Senesi</th>
+              </tr> 
+            </thead>
+            <tbody>
+            {% for hencoop_expense in hencoop_expenses %}
+              <tr>
+                <td> {{ hencoop_expense.title }}</td>
+                <td> {{ "{:,.2f}".format(hencoop_expense.amount) }} TM </td>
+                <td> {{ "{:%d-%m-%Y}".format(hencoop_expense.date) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div> 
+      </div>
+
+    </div>
+    
+
+    <div class="col-sm-6"> 
+      <h2> <strong>{{hencoop.name}}</strong></h2>      
+      <h4>Gun № {{ hencoop_activity.day_number }}</h4>
+      <h4>Baslan senesi : {{ hencoop.start_date }} </h4>
+
+      <div class="progress" style="background-color: #cfd8dc ">
+            {% if performance >= 97 %}
+              <div class="progress-bar progress-bar-success" role="progressbar" 
+                aria-valuemin="0" aria-valuemax="100" style="width:{{ performance}}%">
+                   <strong>{{ performance}} %</strong> 
+                </div>           
+            {% elif performance > 95 %}
+              <div class="progress-bar progress-bar-warning" role="progressbar" 
+                aria-valuemin="0" aria-valuemax="100" style="width:{{ performance}}%">
+                   <strong>{{ performance}} %</strong> 
+                </div>  
+            {% else %}
+              <div class="progress-bar progress-bar-danger" role="progressbar" 
+                aria-valuemin="0" aria-valuemax="100" style="width:{{ performance}}%">
+                   <strong>{{ performance}} %</strong> 
+                </div>  
+            {% endif %}
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <h4>Bugun ondurulen yumurtga sany</h4>
+          <h4><strong> {{ "{:,.0f}".format(hencoop_activity.egg_produced) }} </strong></h4>
+          
+          <form action="{{ url_for('hencoop.new_egg_production' , hencoop_id = hencoop.id) }}" method=post>
+            <div class="input-group" style="max-width: 250px; margin: auto;">
+              <input type="number" min="1" class="form-control" placeholder="Ondurulen mukdar" name='egg_produced'>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Goş</button>
+              </span>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-sm-6 text-center">
+          <h4>Bugun dowulen yumurtga sany</h4>
+          <h4><strong> {{ "{:,.0f}".format(hencoop_activity.egg_broken) }} </strong></h4>
+
+          <form action="{{ url_for('hencoop.new_egg_broken' , hencoop_id = hencoop.id) }}" method=post>
+            <div class="input-group" style="max-width: 250px; margin: auto;">
+              <input type="number" min="1" class="form-control" placeholder="Dowlen mukdar" name='egg_broken'>
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Goş</button>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col-sm-6 text-center">
+          <h4>Umumy ondurulen yumurtga sany</h4>
+          <h4><strong>{{ "{:,.0f}".format(hencoop.egg_produced) }}</strong></h4>
+        </div>
+
+        <div class="col-sm-6 text-center">
+          <h4>Umumy dowulen yumurtga sany</h4>
+          <h4><strong>{{ "{:,.0f}".format(hencoop.egg_broken) }}</strong></h4>        
+        </div>
+      </div>      
+      
+      <hr>
+
+
+
+        <div class="col-sm-12">
+          <ul class="nav nav-tabs" >
+            <li class="active"><a data-toggle="tab" href="#payments"> <strong> Grafika </strong></a></li>
+            <li><a data-toggle="tab" href="#graph"><strong>Loglar</strong></a></li>
+          </ul>
+        </div>
+
+        <div class="col-sm-12" style="height:20px;"></div>
+
+        <div class="tab-content" style="width: 100%">
+          <div id="payments" class="tab-pane fade in active">
+            <div class="col-sm-12" id="chartContainer1" style="height: 400px; width: 100%;"></div>
+          </div>
+          
+          <div id="graph" class="tab-pane fade">
+            <div class="col-sm-12"> 
+              <div class="table-responsive text-left table-egg " style="margin:auto; max-width: 450px">
+                <table class="table table-striped statistic-table-font-size header-fixed">
+                  <thead>
+                    <tr>
+                        <th style="width: 34%"> Ondurulen yumurtga sany</th>
+                        <th style="width: 32%"> Dowulen yumurtga sany</th>
+                        <th style="width: 34%"> Senesi</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for hencoop_activity in hencoop_activities %}
+                    <tr>
+                      <td>  {{ "{:,.0f}".format( hencoop_activity.egg_produced) }} </td>
+                      <td>  {{ "{:,.0f}".format( hencoop_activity.egg_broken) }} </td>
+                      <td>  {{ "{:%d-%m-%Y}".format(hencoop_activity.date) }} </td>
+                    </tr>
+                   {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>       
+
+    </div>
+    
+
+    <div class="col-sm-3 sidenav">
+      <div class="well feed_well" style="margin-top: 10px; background: #b0bec5">
+      
+        <h3><strong>IYM</strong></h3>
+
+        <hr>
+
+        <h4>Bugun</h4>
+        <h4>sort-1 : <strong>{{ "{:,.1f}".format(hencoop_activity.formula1) }} KG</strong></h4>
+        <h4>sort-2 : <strong>{{ "{:,.1f}".format(hencoop_activity.formula2) }} KG</strong></h4>
+        <h4>sort-3 : <strong>{{ "{:,.1f}".format(hencoop_activity.formula3) }} KG</strong></h4>
+
+        <div class="col-xs-12" style="height:25px;"></div>
+
+        <form action="{{ url_for('hencoop.new_feed' , hencoop_id = hencoop.id) }}" method=post>
+          <div class="text-center" style="margin-right: 20px; margin-left: 20px">
+            <select name="formula_selected" id="formula_selected" class="selectpicker form-control input-lg" required>
+              <option value="sort-1">sort-1</option>
+              <option value="sort-2">sort-2</option>
+              <option value="sort-3">sort-3</option>
+            </select>  
+            <input type="number" min="1" class="form-control space input-lg" required placeholder="Iym mukdary" name="feed_amount" id="feed_amount">
+            <input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Goş">
+          </div>
+        </form> 
+
+        <div class="table-responsive table-feed text-left" style="margin-top: 20px">
+          <table class="table table-bordered statistic-table-font-size header-fixed">
+            <thead>
+              <tr>
+                <th>Sort-1 (KG)</th>
+                <th>Sort-2 (KG)</th>
+                <th>Sort-3 (KG)</th>
+                <th>Senesi</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for hencoop_activity in hencoop_activities %}
+              <tr>
+                <td> {{ "{:,.1f}".format(hencoop_activity.formula1) }} </td>
+                <td> {{ "{:,.1f}".format(hencoop_activity.formula2) }} </td>
+                <td> {{ "{:,.1f}".format(hencoop_activity.formula3) }} </td>
+                <td> {{ "{:%d-%m-%Y}".format(hencoop_activity.date) }} </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <hr>
+
+        <h4>Umumy</h4>
+
+        <h4>sort-1 : <strong>{{ "{:,.1f}".format(hencoop.formula1) }} KG</strong></h4>
+        <h4>sort-2 : <strong>{{ "{:,.1f}".format(hencoop.formula2) }} KG</strong></h4>
+        <h4>sort-3 : <strong>{{ "{:,.1f}".format(hencoop.formula3) }} KG</strong></h4>
+
+        <hr>
+      </div>
+
+    </div>
+  
+
+  </div>
+</div>
+
+{% endblock %}

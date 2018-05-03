@@ -1,0 +1,128 @@
+{% extends "main.html" %}
+{% block body %}
+  <ul class="customer_info">
+
+    <div class="container well text-center" style="margin: auto; background: #b0bec5; width: 30%; min-width: 350px">
+      <form action="{{ url_for('egg.add_payment', customer_name = customer.name) }}" method=post>
+        <h2><strong>{{customer.name}}</strong></h2>
+        <hr>
+        <div style="margin-right: 30px; margin-left: 30px">
+          <h3>Töleg</h3>
+          <input type="number"  class="form-control space input-lg" min="1" 
+                 required placeholder="Mukdar" name="amount" id="amount">
+          <input type="submit" style="margin:auto; width:100%; margin-top:5px;" class="btn btn-primary btn-lg" value="Töle">
+        </div> 
+      </form>
+    </div>
+
+  <div class="col-sm-12" style="height:20px;"></div>
+
+  <div class="container container_center" >
+    <div class="row" style="width:70%;">
+        <div class="col-sm-4 centered_input">
+          <h3><span class="label label-danger">Balans :  {{ "{:,.2f}".format(customer.balance) }}</span></h3>
+        </div>
+        <div class="col-sm-4 centered_input">
+          <h3><span class="label label-success"">Alynan :  {{ "{:,.2f}".format(customer.received_amount) }}</span></h3>
+        </div>
+        <div class="col-sm-4 centered_input">
+          <h3><span class="label label-default">Umumy : {{ "{:,.2f}".format(customer.debt) }}</span></h3>
+        </div>
+
+      </div>  
+    </div>
+
+  <div class="col-sm-12" style="height:50px;"></div>
+
+
+  <div class="container">
+    <ul class="nav nav-tabs" style="margin:auto; width:60%">
+      <li class="active"><a data-toggle="tab" href="#payments"> <strong> Tölegler </strong></a></li>
+      <li><a data-toggle="tab" href="#debts"><strong>Algylar</strong></a></li>
+    </ul>
+  </div>
+
+  <div class="col-sm-12" style="height:20px;"></div>
+
+  <div class="tab-content">
+    <div id="payments" class="tab-pane fade in active">
+      {% if customer_payments|length > 0 %}
+      <div class="container"> 
+        <div class="table-responsive " style="margin:auto; width:60%">
+          <table id="customer_payment" class="table table-striped table-font-size">
+            <thead>
+              <tr>
+                  <th>Mukdar(TM)</th>
+                  <th>Senesi</th>
+              </tr>
+            </thead>
+            <tbody id="pagedTable">
+            {% for customer_payment in customer_payments %}
+              <tr>
+                  <td>{{ "{:,.2f}".format(customer_payment.amount) }}</td>
+                  <td>{{ "{:%d-%m-%Y}".format(customer_payment.date) }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    
+    <div id="debts" class="tab-pane fade">
+      {% if egg_outs|length > 0 %}
+      <div class="container"> 
+        <div class="table-responsive " style="margin:auto; width:60%">
+          <table id="egg_out" class="table table-striped table-font-size">
+            <thead>
+              <tr>
+                  <th>Sany</th>
+                  <th>Bahasy (TM)</th>
+                  <th>Umumt bahasy (TM)</th>
+                  <th>Senesi</th>
+              </tr>
+            </thead>
+            <tbody id="pagedTable">
+            {% for egg_out in egg_outs %}
+              <tr>
+                  <td>{{ "{:,.2f}".format(egg_out.count) }}</td>
+                  <td>{{ "{:,.2f}".format(egg_out.price) }}</td>
+                  <td>{{ "{:,.2f}".format(egg_out.price * egg_out.count) }}</td>
+                  <td>{{ "{:%d-%m-%Y}".format(egg_out.date) }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+</ul>
+
+<style type="text/css">
+  .nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+  }
+
+  .nav-tabs, .nav-pills {
+      text-align:center;
+  }
+</style>
+                 
+<script type="text/javascript">
+
+  $(function(){
+    $(document).ready(function() {
+      $('#egg_out').DataTable();
+      $('#customer_payment').DataTable();
+    });
+  });
+</script>
+
+{% endblock %}

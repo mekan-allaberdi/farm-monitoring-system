@@ -1,0 +1,130 @@
+{% extends "main.html" %}
+{% block body %}
+
+  {% if raw_materials|length > 0 %}
+  <ul class=new_formula>
+  	<div class="container" style="width: 40%;" >
+	  		<form action="{{ url_for('feed.add_formula') }}" method='post' id="newFormula">
+		        <div  class=" container centered_input" style="width: 70%; min-width: 300px;">
+		        	<h2>Täze formula</h2>
+		        	<div class="col-xs-12" style="height:20px;"></div>
+			        <div class="col-sm-6 centered_input">
+			        	<div class="panel panel-success">
+				            <div class="panel-heading">
+				              <h3 class="panel-title">Agramy(KG)</h3>
+				            </div>
+			            <div class="panel-body">
+			              <p id="weight">0</p>
+			            </div>
+			          </div>
+			        </div>
+
+			        <div class="col-sm-6 centered_input">
+			        	<div class="panel panel-primary">
+				            <div class="panel-heading">
+				              <h3 class="panel-title">Bahasy(TM)</h3>
+				            </div>
+				            <div class="panel-body">
+				              <p id="price">0</p>
+				            </div>
+			          	</div>
+		        	</div>  	           
+		            <div class = "input-group centered_input">
+			            <select name="formula_name" class="selectpicker form-control input-lg" required>
+			                {% for feed in not_created_formulas %}
+			                	<option value="{{ feed.formula }}">{{ feed.formula }}</option>
+			                {% endfor %}
+		              	</select>
+	               		<span class = "input-group-btn">
+	                  		<input onclick="formula_fullname" type="submit" class="btn self_button btn-lg " value="Goş">
+	               		</span>
+		            </div>	
+		        </div>		            
+	     		
+	    	<div class="col-xs-12" style="height:50px;"></div>
+
+	       	<table class="table table-striped table-font-size" style="min-width: 400px">
+			    <thead>
+				<tr>
+					<th>#</th>
+				    <th>Ady</th>
+				    <th>Bahasy(TM)</th>
+				    <th>Mukdary(KG|LT)</th>
+				</tr>
+			    </thead>
+		    
+			    <tbody>
+				{% for raw_material in raw_materials %}
+					<tr>
+						<td style="width: 10%">{{ loop.index }}</td>
+					    <td style="width: 25%">{{ raw_material.name }}</td>
+					    <td style="width: 30%"><p id={{ raw_material.name }}>{{
+					     "{:,.4f}".format(raw_material.price) }}</p></td>
+					    <td style="width: 35%"><input size=17 type="number" onkeyup="filter_rm_log()" step ="0.001" min="0" 
+					    	required class="form-control space" placeholder="Mukdar" name={{ raw_material.name }}> 		
+						</td>
+					</tr>
+		  	    {% endfor %}
+			    </tbody>
+			</table>
+		</form>
+	</div>
+  </ul>
+
+<script type="text/javascript">
+
+var formula_fullname = function(){
+	fullname = document.getElementById("fullname");
+	name = fullname.value;
+	weight = document.getElementById("weight").innerHTML;
+	weightFloat = parseFloat(Math.round(weight * 1000) / 1000).toFixed(0);
+
+	if (name){
+		fullname.value = name + "-" + weightFloat.toString(); 
+	}
+}
+
+var calc_weight = function(){
+
+    var inputs, i;
+	inputs = document.getElementsByTagName("input");
+	
+	var totalWeight = 0;
+	var totalPrice = 0;
+
+   	for(var i = 0; i < inputs.length; i++) {
+	    if(inputs[i].type.toLowerCase() == 'number') {
+
+	    	input = inputs[i];
+	    	name = input.name;
+	    	weight = input.value;
+	    	price = document.getElementById(name).innerHTML;
+
+	    	floatWeightValue =  parseFloat(weight);
+	    	floatPriceValue =  parseFloat(price);
+
+	    	if(!isNaN(floatWeightValue))
+	    	{
+	    		totalWeight += floatWeightValue;
+	    		totalPrice += floatWeightValue*floatPriceValue;
+	    	}
+	    }
+	}
+
+
+	totalWeight = parseFloat(Math.round(totalWeight * 1000) / 1000).toFixed(3);
+	totalPrice = parseFloat(Math.round(totalPrice * 1000) / 1000).toFixed(3);
+	document.getElementById("weight").innerHTML = totalWeight;
+	document.getElementById("price").innerHTML = totalPrice;
+  }
+
+$(function(){
+  $("input").keyup(calc_weight);
+  $("input").mouseup(calc_weight);
+  $("input[type='submit']").click(formula_fullname);
+
+});
+
+</script>
+  {% endif %}
+{% endblock %}
