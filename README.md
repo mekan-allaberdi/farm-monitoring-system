@@ -35,18 +35,19 @@ Go to root directory.
 
 # Running
 Create DB. For one time *db.create_all()* in **run.py** file.
+Once you created DB you can remove *db.create_all()* line.
+
   ```
   if __name__ == "__main__":
     db.create_all()
     app.run()
   ```
-Once you created DB you can remove *db.create_all()* line.
 
-- Running on localhost:
+- **Running on localhost:**
   ```
   $ python run.py
   ```
-- Running **uwsgi**
+- **Running uwsgi**
   ```
   $ uwsgi --ini uwsgi.ini
   ```
